@@ -32,7 +32,7 @@
 #ifndef _XLOG_MEMORY_H_
 #define _XLOG_MEMORY_H_
 
-#include <stdlib.h>
+#include "xlog.h"
 
 static inline void* xlog_memory_alloc(unsigned int size) {
     return malloc(size);

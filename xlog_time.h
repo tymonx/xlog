@@ -32,6 +32,8 @@
 #ifndef _XLOG_TIME_H_
 #define _XLOG_TIME_H_
 
+#include "xlog.h"
+
 struct xlog_time {
     unsigned int long seconds;
     unsigned int long microseconds;

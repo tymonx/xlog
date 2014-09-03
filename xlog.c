@@ -35,10 +35,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+void _vxlog_write(struct xlog* inst, const enum xlog_level level,
+        const char* file_name,
+        const char* function_name,
+        const unsigned int line_number,
+        const char* fmt, va_list args) {
+
+}
+
 void _xlog_write(struct xlog* inst, const enum xlog_level level,
         const char* file_name,
         const char* function_name,
         const unsigned int line_number,
         const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
 
+    va_end(args);
 }

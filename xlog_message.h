@@ -32,6 +32,7 @@
 #ifndef _XLOG_MESSAGE_H_
 #define _XLOG_MESSAGE_H_
 
+#include "xlog.h"
 #include "xlog_time.h"
 
 struct xlog_message;

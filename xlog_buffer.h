@@ -33,7 +33,6 @@
 #define _XLOG_BUFFER_H_
 
 #include "xlog.h"
-#include <stdlib.h>
 
 struct xlog_buffer {
     char* data;
@@ -48,6 +47,9 @@ void xlog_buffer_init(struct xlog* inst, const enum xlog_level level,
 
 void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
         struct xlog_buffer* buffer, const char* fmt, ...);
+
+void vxlog_buffer_write(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer, const char* fmt, va_list args);
 
 void xlog_buffer_destroy(struct xlog* inst, const enum xlog_level level,
         struct xlog_buffer* buffer);

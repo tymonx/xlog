@@ -33,9 +33,7 @@
 #include "xlog_memory.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 static inline int xlog_buffer_exist(struct xlog_buffer* buffer) {
     return !(buffer->data == NULL || buffer->size == 0);
@@ -66,7 +64,7 @@ static int xlog_buffer_resize(struct xlog_buffer* buffer, size_t size) {
 
 void xlog_buffer_create(struct xlog* inst, const enum xlog_level level,
         struct xlog_buffer* buffer) {
-    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+    if (level < inst->level) return;
 
     buffer->data = xlog_memory_alloc(XLOG_DEFAULT_BUFFER_SIZE);
     if (NULL != buffer->data) {
@@ -79,7 +77,7 @@ void xlog_buffer_create(struct xlog* inst, const enum xlog_level level,
 
 void xlog_buffer_init(struct xlog* inst, const enum xlog_level level,
         struct xlog_buffer* buffer) {
-    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+    if (level < inst->level) return;
     if (!xlog_buffer_exist(buffer)) return;
 
     buffer->data[0] = '\0';
@@ -87,7 +85,7 @@ void xlog_buffer_init(struct xlog* inst, const enum xlog_level level,
 
 void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
         struct xlog_buffer* buffer, const char* fmt, ...) {
-    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+    if (level < inst->level) return;
     if (!xlog_buffer_exist(buffer)) return;
 
     va_list args;
@@ -110,12 +108,30 @@ void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
     va_end(args);
 }
 
+void vxlog_buffer_write(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer, const char* fmt, va_list args) {
+    if (level < inst->level) return;
+    if (!xlog_buffer_exist(buffer)) return;
+
+    size_t string_length = strlen(buffer->data);
+    size_t total_length = string_length + vsnprintf(NULL, 0, fmt, args) + 1;
+
+    if (total_length > buffer->size) {
+        int status = xlog_buffer_resize(buffer,
+                XLOG_DEFAULT_BUFFER_SIZE + total_length);
+        if (XLOG_SUCCESS != status) {
+            return;
+        }
+    }
+
+    vsprintf(&buffer->data[string_length], fmt, args);
+}
+
 void xlog_buffer_destroy(struct xlog* inst, const enum xlog_level level,
         struct xlog_buffer* buffer) {
-    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+    if (level < inst->level) return;
 
     xlog_memory_free(buffer->data);
     buffer->data = NULL;
     buffer->size = 0;
 }
-

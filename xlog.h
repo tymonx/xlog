@@ -32,6 +32,9 @@
 #ifndef _XLOG_H_
 #define _XLOG_H_
 
+#include <stdlib.h>
+#include <stdarg.h>
+
 #define XLOG_DEFAULT_BUFFER_SIZE        256
 
 #define XLOG_FILE_NAME          __FILE__
@@ -66,11 +69,24 @@ void _xlog_write(struct xlog* inst, const enum xlog_level level,
         const unsigned int line_number,
         const char* fmt, ...);
 
+void _vxlog_write(struct xlog* inst, const enum xlog_level level,
+        const char* file_name,
+        const char* function_name,
+        const unsigned int line_number,
+        const char* fmt, va_list args);
+
 #define xlog_write(inst, level, ...)\
     _xlog_write((inst), (level),\
             XLOG_FILE_NAME,\
             XLOG_FUNCTION_NAME,\
             XLOG_LINE_NUMBER,\
             __VA_ARGS__)
+
+#define vxlog_write(inst, level, fmt, args)\
+    _xlog_write((inst), (level),\
+            XLOG_FILE_NAME,\
+            XLOG_FUNCTION_NAME,\
+            XLOG_LINE_NUMBER,\
+            fmt, args)
 
 #endif /* _XLOG_H_ */
