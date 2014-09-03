@@ -81,6 +81,7 @@ void xlog_buffer_init(struct xlog* inst, const enum xlog_level level,
     if (!xlog_buffer_exist(buffer)) return;
 
     buffer->data[0] = '\0';
+    buffer->size = 0;
 }
 
 void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
