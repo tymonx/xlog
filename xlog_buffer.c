@@ -90,8 +90,6 @@ void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
     if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
     if (!xlog_buffer_exist(buffer)) return;
 
-    int status = XLOG_SUCCESS;
-
     va_list args;
     va_start(args, fmt);
 
@@ -99,7 +97,7 @@ void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
     size_t total_length = string_length + vsnprintf(NULL, 0, fmt, args) + 1;
 
     if (total_length > buffer->size) {
-        status = xlog_buffer_resize(buffer,
+        int status = xlog_buffer_resize(buffer,
                 XLOG_DEFAULT_BUFFER_SIZE + total_length);
         if (XLOG_SUCCESS != status) {
             va_end(args);
