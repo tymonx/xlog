@@ -41,8 +41,8 @@ static int xlog_buffer_resize(struct xlog_buffer* buffer, unsigned int size) {
     if (size > 0) {
         char* data = xlog_memory_alloc(size);
         if (NULL != data) {
+            memset(data, '\0', size);
             strncpy(data, buffer->data, size-1);
-            data[size] = '\0';
             xlog_memory_free(buffer->data);
             buffer->data = data;
             buffer->size = size;
