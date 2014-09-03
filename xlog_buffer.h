@@ -33,10 +33,11 @@
 #define _XLOG_BUFFER_H_
 
 #include "xlog.h"
+#include <stdlib.h>
 
 struct xlog_buffer {
     char* data;
-    unsigned int size;
+    size_t size;
 };
 
 void xlog_buffer_create(struct xlog* inst, const enum xlog_level level,
@@ -55,7 +56,7 @@ char* xlog_buffer_get_data(struct xlog_buffer* buffer) {
     return buffer->data;
 }
 
-unsigned int xlog_buffer_get_size(struct xlog_buffer* buffer) {
+size_t xlog_buffer_get_size(struct xlog_buffer* buffer) {
     return buffer->size;
 }
 

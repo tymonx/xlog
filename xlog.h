@@ -32,20 +32,27 @@
 #ifndef _XLOG_H_
 #define _XLOG_H_
 
+#define XLOG_DEFAULT_BUFFER_SIZE        256
+
 #define XLOG_FILE_NAME          __FILE__
 #define XLOG_FUNCTION_NAME      __FUNCTION__
 #define XLOG_LINE_NUMBER        __LINE__
 
+enum xlog_status {
+    XLOG_SUCCESS                = 0,
+    XLOG_ERROR_MEMORY_OUT       = -1
+};
+
 enum xlog_level {
-    XLOG_EMERGENCY      = 0,
-    XLOG_ALERT          = 1,
-    XLOG_CRITICAL       = 2,
-    XLOG_ERROR          = 3,
-    XLOG_WARNING        = 4,
-    XLOG_NOTICE         = 5,
-    XLOG_INFO           = 6,
-    XLOG_DEBUG          = 7,
-    XLOG_LEVEL_MAX      = 8
+    XLOG_EMERGENCY              = 0,
+    XLOG_ALERT                  = 1,
+    XLOG_CRITICAL               = 2,
+    XLOG_ERROR                  = 3,
+    XLOG_WARNING                = 4,
+    XLOG_NOTICE                 = 5,
+    XLOG_INFO                   = 6,
+    XLOG_DEBUG                  = 7,
+    XLOG_LEVEL_MAX              = 8
 };
 
 struct xlog {
