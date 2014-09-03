@@ -29,16 +29,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef _XLOG_BUFFER_H_
+#define _XLOG_BUFFER_H_
+
 #include "xlog.h"
-#include "xlog_memory.h"
 
-#include <stdlib.h>
-#include <string.h>
+struct xlog_buffer {
+    char* data;
+    unsigned int size;
+};
 
-void _xlog_write(struct xlog* inst, const enum xlog_level level,
-        const char* file_name,
-        const char* function_name,
-        const unsigned int line_number,
-        const char* fmt, ...) {
+void xlog_buffer_create(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer);
 
+void xlog_buffer_init(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer);
+
+void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer, const char* fmt, ...);
+
+void xlog_buffer_destroy(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer);
+
+char* xlog_buffer_get_data(struct xlog_buffer* buffer) {
+    return buffer->data;
 }
+
+unsigned int xlog_buffer_get_size(struct xlog_buffer* buffer) {
+    return buffer->size;
+}
+
+#endif /* _XLOG_BUFFER_H_ */

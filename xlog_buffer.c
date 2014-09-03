@@ -29,16 +29,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "xlog.h"
+#include "xlog_buffer.h"
 #include "xlog_memory.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-void _xlog_write(struct xlog* inst, const enum xlog_level level,
-        const char* file_name,
-        const char* function_name,
-        const unsigned int line_number,
-        const char* fmt, ...) {
+static int xlog_buffer_resize(struct xlog_buffer* buffer, unsigned int size) {
+    int status = 0;
+
+    char* data = xlog_memory_alloc(size+1);
+    if (NULL != data) {
+        strncpy(data, buffer->data, size);
+        data[size] = '\0';
+        xlog_memory_free(buffer->data);
+        buffer->data = data;
+        buffer->size = size;
+    } else {
+        status = -1;
+    }
+
+    return status;
+}
+
+void xlog_buffer_create(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer) {
+    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+
+    buffer->data = xlog_memory_alloc(256);
+    if (NULL != buffer->data) {
+        buffer->data[0] = '\0';
+        buffer->size = 256;
+    } else {
+        buffer->size = 0;
+    }
+}
+
+void xlog_buffer_init(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer) {
+    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+
+    if ((buffer->size > 0) && (NULL != buffer->data)) {
+        buffer->data[0] = '\0';
+    }
+}
+
+void xlog_buffer_write(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer, const char* fmt, ...) {
+    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
 
 }
+
+void xlog_buffer_destroy(struct xlog* inst, const enum xlog_level level,
+        struct xlog_buffer* buffer) {
+    if ((NULL == inst) || (NULL == buffer) || (level < inst->level)) return;
+
+    xlog_memory_free(buffer->data);
+    buffer->data = NULL;
+    buffer->size = 0;
+}
+
